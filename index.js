@@ -7,7 +7,7 @@
 // Website URL
 // The user must be able to make multiple searches and see only the results for the current search.
 // As a stretch goal, try adding the park's address to the results.
-
+'use strict'
 
 const CORS = 'https://cors-anywhere.herokuapp.com/';
 const apiKey = 'thBIVKqHyCPglv0pdsoIltfQ4zEoLgKmZqgWt7Cq';
