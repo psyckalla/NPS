@@ -14,12 +14,22 @@ const apiKey = 'thBIVKqHyCPglv0pdsoIltfQ4zEoLgKmZqgWt7Cq';
 const searchURL = 'https://developer.nps.gov/api/v1/parks'
 
 
-
+function multipleQueries(query) {
+    const searchStates = [];
+    for (let i = 0; i < query.length; i++) {
+        console.log(`q=${query[i]}`);
+        searchStates.push(`q=${query[i]}`);
+        
+    };
+    return searchStates.join('&');
+    console.log(searchStates);
+};
 
 
 
 function formatQueryParams(params) {
     const queryItems = Object.keys(params)
+
     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
   return queryItems.join('&');
 }
@@ -28,9 +38,11 @@ function formatQueryParams(params) {
 function getParks(query = 'New York', maxResults = 10) {
     console.log('getparks ran');
     const params = {
-        q: query,
         limit: maxResults
     };
+    console.log(query);
+    const queryMore = multipleQueries(query);
+    console.log(queryMore);
 
     const options = {
         headers: new Headers({
@@ -41,7 +53,8 @@ function getParks(query = 'New York', maxResults = 10) {
     const queryString = formatQueryParams(params);
     console.log(queryString);
     console.log('param ran');
-    const url = searchURL + '?' + queryString;
+    const url = searchURL + '?' + queryString+ '&' + queryMore;
+    console.log(url);
 
     fetch(CORS+url, options)
         .then(response => {
@@ -65,8 +78,7 @@ function displayResults(responseJson) {
         ${responseJson.data[i].fullName}</a></h3>
         <p>${responseJson.data[i].description}</p>
         <p><a href="${responseJson.data[i].url}">${responseJson.data[i].url}</a></p>`)
-    }
-    console.log(responseJson.data[0].fullName, responseJson.data[0].description, responseJson.data[0].url);
+    };
 }
 
 function watchForm() {
@@ -76,6 +88,7 @@ function watchForm() {
         const searchTerm = $('.parks').val();
         const maxResults = $('.numbers').val();
         getParks(searchTerm, maxResults);
+        
     });
 }
 
